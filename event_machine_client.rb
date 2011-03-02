@@ -16,10 +16,9 @@ module HttpHeaders
   end
   
   def receive_data(data)    
-    puts "DATA RECIEVED " + data.class.to_s
-    puts "DATA RECIEVED " + data.inspect    
-    @data = JSON.parse(data)
-    puts "[LOGGING RESPONSE FROM SERVER] " + @data.inspect + " #{@data.class.to_s}"
+  #  puts "DATA RECIEVED " + data.class.to_s
+  #  puts "DATA RECIEVED " + data.inspect    
+    @data = JSON.parse(data)  
     
     initialize_fetcher
     @fetcher.display_tweets(@data)
@@ -27,19 +26,21 @@ module HttpHeaders
   
   def unbind
     if @data =~ /[\n][\r]*[\n]/m
-      puts "*********** DATA #{@data} **************"
+      puts "Connection Closed  #{@data} "
     end  
+    
     EventMachine::stop_event_loop
   end
   
   private
   
   def initialize_fetcher
-     @fetcher =  Fetcher.new({ :consumer_key => "ZfUjxwKPBnOts1BXF664g",
-                       :consumer_secret => "U5eQDspHulRH3vBgdJY1VtyhKQcwQnEsocjVq1BFA",
-                       :oauth_token => "18478038-Al8rapWg1wFiDE3gIbm58NHnkiw291vX3u0fE1aBG",
-                       :oauth_token_secret => "ScaNHDrGIouogq4aZiDZfSuD84OXvW4hiWowhJs9h8" 
-                      })
+     @fetcher =  Fetcher.new({
+         :consumer_key => "Twitter Consumer Key",
+         :consumer_secret => "Twitter Consumer Secret",
+         :oauth_token => "Twitter Access Token",
+         :oauth_token_secret => "Twitter Access Secret"
+         })
                       
                       
   end

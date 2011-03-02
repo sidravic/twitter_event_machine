@@ -1,9 +1,9 @@
 require 'twitter'
 require 'oauth'
 
-module TwitterLib
-  ACCESS_TOKEN = '18478038-Al8rapWg1wFiDE3gIbm58NHnkiw291vX3u0fE1aBG'
-  ACCESS_SECRET = 'ScaNHDrGIouogq4aZiDZfSuD84OXvW4hiWowhJs9h8'
+module TwitterLib  
+  ACCESS_TOKEN = 'Your Twitter Access token'
+  ACCESS_SECRET = 'Your Twitter Access Secret'
   
   module TimeLine
      # Returns the 20 most recent statuses, including retweets if they exist, posted by the authenticating user and the users they follow
@@ -72,7 +72,7 @@ module TwitterLib
       @client = initialize_twitter_client      
     end   
     
-    def self.user(screen_name = 'Super_sid')
+    def self.user(screen_name = 'XYZ')
       Twitter.user(screen_name)
     end
     
@@ -85,19 +85,16 @@ module TwitterLib
     end
 
     end
-  end
+  end  
 
-  
+
 
   user  = TwitterLib::Base.new({
-    :consumer_key => "ZfUjxwKPBnOts1BXF664g",
-    :consumer_secret => "U5eQDspHulRH3vBgdJY1VtyhKQcwQnEsocjVq1BFA",
-    :oauth_token => "18478038-Al8rapWg1wFiDE3gIbm58NHnkiw291vX3u0fE1aBG",
-    :oauth_token_secret => "ScaNHDrGIouogq4aZiDZfSuD84OXvW4hiWowhJs9h8"
-    })
-
-#tweet = user.client.home_timeline.first
-#puts tweet[:user].name + "  " + tweet.text +  " " + tweet[:place].to_s
+      :consumer_key => "Twitter Consumer Key",
+      :consumer_secret => "Twitter Consumer Secret",
+      :oauth_token => "Twitter Access Token",
+      :oauth_token_secret => "Twitter Access Secret"
+      })
 
 
 

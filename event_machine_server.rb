@@ -8,7 +8,8 @@ require File.expand_path("tweet_Fetcher.rb", __FILE__ + "/..")
 
 class Echo < EM::Connection
 
-attr_reader :data, :response, :status, :fetcher  
+ attr_reader :data, :response, :status, :fetcher   
+ 
  def post_init   
    @status = :inactive 
     ip, port = Socket.unpack_sockaddr_in( get_peername) #peer.methods.inspect
@@ -16,11 +17,12 @@ attr_reader :data, :response, :status, :fetcher
   end
 
   def receive_data(data)
-    puts "[LOGGING: RECEIVED] #{data}"
+#    puts "[LOGGING: RECEIVED] #{data}"
     @data = JSON.parse(data)
-    puts "[LOGGING: PARSED DATA ] #{@data} #{@data.class.to_s}"
+#    puts "[LOGGING: PARSED DATA ] #{@data} #{@data.class.to_s}"
     initialize_fetcher
     execute_request
+    
   end
 
   def unbind
@@ -35,30 +37,62 @@ attr_reader :data, :response, :status, :fetcher
     if @data["op"] == "fetch"
       puts "Please wait while we fetch the data ..."
       @status = :active
-      response = @fetcher.fetch
-      puts "[LOGGING FETCHER RESPONSE JSON] " + response.to_json
+      response = @fetcher.fetch      
       send_data(response.to_json)
+      Echo.activate_periodic_timer(self)
+    elsif @data["op"] == "update"
+      puts "Fetching update . . ."
+      response = @fetcher.fetch_update
+      send_data(response.to_json)      
     end
   end
   
-  private
+  def self.activate_event_machine(this = nil)
+    EM.run do 
+        puts "Starting echo server . . . ."
+        EM.start_server('0.0.0.0', 6789, Echo)
+        puts "STARTED "
+    end    
+  end
+  
+  def self.activate_periodic_timer(this = nil)
+    EM.add_periodic_timer(5) do
+      this.update_operation
+      this.execute_request
+    end    
+  end
+  
+  def update_operation
+    @data["op"] = "update"
+  end
+  
+  private  
 
   def initialize_fetcher
-    @fetcher =  Fetcher.new({ :consumer_key => "ZfUjxwKPBnOts1BXF664g",
-                     :consumer_secret => "U5eQDspHulRH3vBgdJY1VtyhKQcwQnEsocjVq1BFA",
-                     :oauth_token => "18478038-Al8rapWg1wFiDE3gIbm58NHnkiw291vX3u0fE1aBG",
-                     :oauth_token_secret => "ScaNHDrGIouogq4aZiDZfSuD84OXvW4hiWowhJs9h8" 
-                    })
+    @fetcher =  Fetcher.new({
+        :consumer_key => "Twitter Consumer Key",
+        :consumer_secret => "Twitter Consumer Secret",
+        :oauth_token => "Twitter Access Token",
+        :oauth_token_secret => "Twitter Access Secret"
+        })
                     
-    puts "[LOGGING FETCHER INITIALIZED] #{@fetcher.inspect}"                
+   # puts "[LOGGING FETCHER INITIALIZED] #{@fetcher.inspect}"                
   end
   
 end
 
+Echo.activate_event_machine
+
+=begin
   EM.run do 
-    puts "Starting echo server . . . ."
-    EM.start_server('0.0.0.0', 6789, Echo)
-    puts "STARTED "
+      puts "Starting echo server . . . ."
+      EM.start_server('0.0.0.0', 6789, Echo)
+      puts "STARTED "
+    
+      EM.add_periodic_timer(5) do
+        puts "Timer activated"
+      end    
   end
+=end
 
 
