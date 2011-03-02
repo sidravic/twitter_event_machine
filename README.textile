@@ -1,0 +1,18 @@
+h2. Event Machine Twitter App
+
+This is a sample twitter app written purely to understand how event machine could be used to implement a simple twitter feed fetcher. The runs on the console and fetches tweets and periodically updates your tweet list.
+
+If you are new to event machine there are tons of useful resources. Here are a few that I used:
+* "home page":http://rubyeventmachine.com/ (home page)
+* "Tutorials List":https://github.com/eventmachine/eventmachine/wiki/Tutorials
+* But the most gradual introduction is available as a "PDF":http://everburning.com/wp-content/uploads/2009/02/eventmachine_introduction_10.pdf and also check out the presentation at "http://everburning.com/news/eventmachine-introductions/":http://everburning.com/news/eventmachine-introductions/
+
+h2. To run the app
+
+This app works on Ruby 1.9.2 (not tried it with 1.8.7)
+* You would first need to install the event_machine gem.
+* You would need to place your twitter API keys in all the files.( Its a hacky approach to check out how event machine works)
+* Run the event_machine_server first, followed by the event_machine_client.
+* You should already be having most of the gems in your gem list.
+
+Hope this is useful.
